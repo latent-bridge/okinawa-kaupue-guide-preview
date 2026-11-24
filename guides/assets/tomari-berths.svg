@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="320" viewBox="0 0 760 320" role="img" aria-labelledby="t">
+<title id="t">泊港北岸與南岸乘船位置示意圖</title>
+<rect width="760" height="320" fill="#e7eddf"/>
+<path d="M0 105H610V219H0" fill="#b6dfdf"/>
+<g stroke="#126558" stroke-width="4"><path d="M0 105H610V219H0" fill="none"/><circle cx="330" cy="105" r="9" fill="#126558"/><circle cx="440" cy="219" r="9" fill="#126558"/></g>
+<g font-family="sans-serif" fill="#193e39" font-size="25"><text x="54" y="64">北岸　クイーンざまみ</text><text x="54" y="276">南岸　とまりん前・フェリーざまみ</text><text x="185" y="170" fill="#2b666c">泊港</text></g>
+</svg>
