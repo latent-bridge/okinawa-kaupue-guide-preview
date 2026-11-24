@@ -1,36 +1,60 @@
-
-const guides = Array.from(document.querySelectorAll('.result'));
 const form = document.querySelector('form');
 const query = document.querySelector('#query');
 const purpose = document.querySelector('#purpose');
 const region = document.querySelector('#region');
+const guideGroup = document.querySelector('#guide-results');
+const productGroup = document.querySelector('#product-results');
+const guides = [...guideGroup.querySelectorAll('.result')];
+const products = [...productGroup.querySelectorAll('.result')];
 const empty = document.querySelector('#empty');
-for (const select of [purpose, region]) {
-  const values = new Set(guides.map(guide => guide.dataset[select.id]));
-  for (const value of values) select.add(new Option(value, value));
+const suggestion = document.querySelector('#suggestion');
+
+for (const [select, records] of [[purpose, guides], [region, [...guides, ...products]]]) {
+  for (const value of new Set(records.map(item => item.dataset[select.id]))) {
+    select.add(new Option(value, value));
+  }
 }
 function normalize(value) {
   return value.normalize('NFKC').toLowerCase().trim();
 }
-function filterGuides() {
+function refresh() {
+  const shopping = form.elements.mode.value === 'products';
   const words = normalize(query.value).split(/\s+/);
-  let visible = 0;
-  for (const guide of guides) {
-    const terms = normalize([guide.textContent, ...Object.values(guide.dataset)].join(' '));
-    guide.hidden = (purpose.value && purpose.value !== guide.dataset.purpose)
-      || (region.value && region.value !== guide.dataset.region)
-      || !words.every(word => terms.includes(word));
-    if (!guide.hidden) visible++;
-  }
-  document.querySelector('#count').textContent = '旅行指南（' + visible + '）';
-  empty.hidden = visible !== 0;
+  const matching = item => {
+    const text = normalize(item.textContent + ' ' + item.dataset.alias);
+    return (!region.value || item.dataset.region === region.value) && words.every(word => text.includes(word));
+  };
+  const matchedProducts = products.filter(matching);
+  const matchedGuides = guides.filter(item => matching(item) && (!purpose.value || purpose.value === item.dataset.purpose));
+  for (const item of guides) item.hidden = !matchedGuides.includes(item);
+  for (const item of products) item.hidden = !matchedProducts.includes(item);
+  guideGroup.hidden = shopping;
+  productGroup.hidden = !shopping;
+  document.querySelector('#purpose-field').hidden = shopping;
+  document.querySelector('#query-label').textContent = shopping ? '想找什麼商品？' : '你想做什麼？';
+  query.placeholder = shopping ? '例如：起司蛋糕、ガトーショコラ、cocolo' : '例如：蛋糕、海鮮、船班';
+  const count = shopping ? matchedProducts.length : matchedGuides.length;
+  document.querySelector('#count').textContent = shopping ? '商品與販售店（' + count + '）' : '旅行指南（' + count + '）';
+  empty.hidden = count > 0;
+  empty.querySelector('p').textContent = shopping ? '目前沒有符合條件的商品紀錄。可以換個品名或地區。' : '這組條件還沒有指南。可以換個地區或關鍵字。';
+  suggestion.hidden = shopping || !query.value.trim() || !matchedProducts.length;
+  suggestion.firstElementChild.textContent = '查看符合的商品與販售店（' + matchedProducts.length + '）';
 }
-form.addEventListener('input', filterGuides);
+function showProductSearch() {
+  form.elements.mode.value = 'products';
+  refresh();
+  query.focus();
+}
+suggestion.firstElementChild.addEventListener('click', showProductSearch);
+form.addEventListener('input', refresh);
 form.addEventListener('submit', event => event.preventDefault());
 empty.querySelector('button').addEventListener('click', () => {
-  form.reset();
-  filterGuides();
+  query.value = purpose.value = region.value = '';
+  refresh();
   query.focus();
 });
+const params = new URLSearchParams(location.search);
+if (params.get('mode') === 'products') form.elements.mode.value = 'products';
+query.value = params.get('q') || '';
 form.hidden = false;
-filterGuides();
+refresh();
