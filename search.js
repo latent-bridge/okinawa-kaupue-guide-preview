@@ -34,7 +34,7 @@ function refresh() {
   productGroup.hidden = !hasCriteria || !shopping;
   document.querySelector('#purpose-field').hidden = shopping;
   document.querySelector('#query-label').textContent = shopping ? '想找什麼商品或體驗？' : '你想做什麼？';
-  query.placeholder = shopping ? '例如：起司蛋糕、賞鯨、cocolo' : '例如：蛋糕、海鮮、船班';
+  query.placeholder = shopping ? '例如：船票、起司蛋糕、賞鯨' : '例如：蛋糕、海鮮、船班';
   const count = shopping ? matchedProducts.length : matchedGuides.length;
   document.querySelector('#count').hidden = shopping && !hasCriteria;
   document.querySelector('#count').textContent = shopping ? '商品與體驗（' + count + '）' : (hasCriteria ? '符合條件的指南' : '全部旅行指南') + '（' + count + '）';
