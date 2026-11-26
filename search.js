@@ -33,16 +33,16 @@ function refresh() {
   guideGroup.hidden = shopping;
   productGroup.hidden = !hasCriteria || !shopping;
   document.querySelector('#purpose-field').hidden = shopping;
-  document.querySelector('#query-label').textContent = shopping ? '想找什麼商品？' : '你想做什麼？';
-  query.placeholder = shopping ? '例如：起司蛋糕、ガトーショコラ、cocolo' : '例如：蛋糕、海鮮、船班';
+  document.querySelector('#query-label').textContent = shopping ? '想找什麼商品或體驗？' : '你想做什麼？';
+  query.placeholder = shopping ? '例如：起司蛋糕、賞鯨、cocolo' : '例如：蛋糕、海鮮、船班';
   const count = shopping ? matchedProducts.length : matchedGuides.length;
   document.querySelector('#count').hidden = shopping && !hasCriteria;
-  document.querySelector('#count').textContent = shopping ? '商品與販售店（' + count + '）' : (hasCriteria ? '符合條件的指南' : '全部旅行指南') + '（' + count + '）';
+  document.querySelector('#count').textContent = shopping ? '商品與體驗（' + count + '）' : (hasCriteria ? '符合條件的指南' : '全部旅行指南') + '（' + count + '）';
   empty.hidden = !hasCriteria || count > 0;
   empty.querySelector('p').textContent = shopping ? '目前沒有符合條件的商品紀錄。可以換個品名或地區。' : '這組條件還沒有指南。可以換個地區或關鍵字。';
   empty.querySelector('button').textContent = shopping ? '清除商品搜尋條件' : '清除條件，看全部指南';
   suggestion.hidden = shopping || !query.value.trim() || !matchedProducts.length;
-  suggestion.firstElementChild.textContent = '查看符合的商品與販售店（' + matchedProducts.length + '）';
+  suggestion.firstElementChild.textContent = '查看符合的商品與體驗（' + matchedProducts.length + '）';
 }
 function showProductSearch() {
   form.elements.mode.value = 'products';
