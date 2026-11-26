@@ -46,3 +46,6 @@ dialog::backdrop{background:#143b36bb}
 .modes label:has(:checked){background:#28574d;color:white}
 .stockist small,.stockist footer{color:#46695e}
 .stockist footer{margin-top:.65rem}
+
+.island-read{background:#f3f3e6;border-left:.28rem solid #557562;padding:.85rem 1.1rem;margin:.2rem 0 1.2rem;border-radius:.35rem}
+.island-read h2,.island-read p{margin:0 0 .3rem}.island-read a{display:block;padding:.38rem 0;text-underline-offset:.2em}
