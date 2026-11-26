@@ -36,3 +36,22 @@ for (const link of document.querySelectorAll('[data-zoom]')) {
     dialog.showModal();
   });
 }
+
+for (const form of document.querySelectorAll('[data-rail-fares]')) {
+  const ja = document.documentElement.lang === 'ja';
+  const showFare = () => {
+    const n = Number(form.querySelector('[data-trips]').value);
+    const single = Number(form.querySelector('[data-stop]').value);
+    const airport = Number(form.dataset.airport), pass = Number(form.dataset.pass);
+    const total = airport + single * 2 * n;
+    const unit = ja ? '円' : ' 日圓';
+    const choice = total < pass ? (ja ? '普通券' : '單程票') : (ja ? '1日券' : '一日券');
+    const result = total === pass ? (ja ? '同額' : '兩者同價') : (ja ? choice+'が'+Math.abs(total-pass)+'円安い' : choice+'省 '+Math.abs(total-pass)+unit);
+    form.querySelector('output').textContent = (ja ? '普通券：' : '單程票：') +
+      (n ? single+' × 2 × '+n+' + ' : '') + airport + (n ? ' = '+total : '') +
+      unit + (ja ? ' ／ 1日券：' : ' ／ 一日券：') + pass + unit + '。'+ result+'。';
+  };
+  form.addEventListener('change', showFare);
+  showFare();
+  form.hidden = false;
+}
