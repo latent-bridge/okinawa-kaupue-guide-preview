@@ -46,7 +46,8 @@ for (const form of document.querySelectorAll('[data-rail-fares]')) {
     const total = airport + single * 2 * n;
     const unit = ja ? '円' : ' 日圓';
     const choice = total < pass ? (ja ? '普通券' : '單程票') : (ja ? '1日券' : '一日券');
-    const result = total === pass ? (ja ? '同額' : '兩者同價') : (ja ? choice+'が'+Math.abs(total-pass)+'円安い' : choice+'省 '+Math.abs(total-pass)+unit);
+    const valid = form.querySelector('[data-validity]').value === 'yes';
+    const result = !valid ? (ja ? '全乗車を1日券でカバーできるとは限りません。購入時刻と各乗車時刻を確認して再計算してください' : '一日券可能無法涵蓋所有車程。請確認購票與各段搭車時間，再重新比較') : total === pass ? (ja ? '同額' : '兩者同價') : (ja ? choice+'が'+Math.abs(total-pass)+'円安い' : choice+'省 '+Math.abs(total-pass)+unit);
     form.querySelector('output').textContent = (ja ? '普通券：' : '單程票：') +
       (n ? single+' × 2 × '+n+' + ' : '') + airport + (n ? ' = '+total : '') +
       unit + (ja ? ' ／ 1日券：' : ' ／ 一日券：') + pass + unit + '。'+ result+'。';
